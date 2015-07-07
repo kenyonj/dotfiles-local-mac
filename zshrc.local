@@ -132,14 +132,13 @@ gsolo() { git commit --amend --no-edit --author "$gh_name <$gh_email[1]@$gh_emai
 export PATH="/usr/local/heroku/bin:$PATH"
 export DOCKER_HOST="tcp://localhost:4243"
 
-export PATH="$PATH:/usr/local/lib/node_modules"
-export PATH="/home/kenyonj/apps:$PATH"
-source /usr/share/chruby/chruby.sh
-source /usr/share/chruby/auto.sh
+source /usr/local/opt/chruby/share/chruby/chruby.sh
+source /usr/local/opt/chruby/share/chruby/auto.sh
 chruby ruby-2.2.2
-source ~/dotfiles-local/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/dotfiles-local-mac/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 export PATH="$HOME/.bin:$PATH"
 
 #nvm
-source ~/.nvm/nvm.sh
+export NVM_DIR=~/.nvm
+source $(brew --prefix nvm)/nvm.sh

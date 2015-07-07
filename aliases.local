@@ -4,7 +4,7 @@ alias ar="source ~/.aliases.local; echo 'aliases reloaded!'"
 
 # ZSH
 alias zr="source ~/.zshrc; echo 'zshrc reloaded!'"
-alias ls="ls --color=auto"
+alias ls="ls -G"
 
 # PS
 alias psa="ps aux"

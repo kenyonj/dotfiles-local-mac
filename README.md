@@ -16,11 +16,11 @@ Install
 
 Clone into your environment:
 
-`cd && git clone git@github.com:kenyonj/dotfiles-local.git`
+`cd && git clone git@github.com:kenyonj/dotfiles-local-mac.git`
 
 Install:
 
-`cd && cd dotfiles-local && bin.local/setup`
+`cd && cd dotfiles-local-mac && bin.local/setup`
 
 This will create symlinks in your home (`~/`) directory for all the config files
 that you have in your `dotfiles-local` directory.
