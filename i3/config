@@ -1,0 +1,202 @@
+# Mod4 = Windows Key, Command Key, $mod
+# Mod1 = Alt, $other
+# Mod3 = Left Control, $mod
+
+set $mod Mod4
+set $other Mod1
+set $update
+
+for_window [class="^.*"] border pixel 0
+
+#gaps config
+gaps inner 20
+gaps outer 5
+smart_borders no_gaps
+smart_gaps on
+
+# font for window titles. ISO 10646 = Unicode
+font pango:DejaVu Sans Mono 9
+
+# User Mouse+$mod to drag floating windows to a position
+floating_modifier $mod
+
+# scratchpad, move and show, this is a hidden workspace where we can put windows
+bindsym $mod+m move scratchpad
+bindsym $mod+o scratchpad show
+
+# move workspaces
+bindsym $mod+comma move workspace to output left
+bindsym $mod+period move workspace to output right
+
+# mac like cross-hair screenshot
+bindsym --release $other+Shift+4 exec --no-startup-id import ~/images/shots/$(date +%Y-%m-%d-%k%M%S)-scrot.png
+
+# start a terminal
+bindsym $mod+Return exec ~/.i3/shell.sh
+
+# kill focused window
+bindsym $mod+$other+Q kill
+
+# start dmenu
+bindsym $other+space exec dmenu_run
+
+# i3 shorcuts for reload/restart/exit
+bindsym $mod+$other+Shift+C reload
+bindsym $mod+$other+Shift+R restart
+bindsym $mod+$other+Shift+E exit
+
+# change focus
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+# move focused window
+bindsym $mod+$other+H move left
+bindsym $mod+$other+J move down
+bindsym $mod+$other+K move up
+bindsym $mod+$other+L move right
+
+# horizontal split
+bindsym $mod+Shift+I split h
+
+# vertical split
+bindsym $mod+i split v
+
+# zoom
+bindsym $mod+$other+Z fullscreen
+
+# change container layout (stacked, tabbed, default)
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout default
+
+# toggle tiling/floating
+bindsym $mod+$other+space floating toggle
+
+# change focus between tiling/floating windows
+bindsym $mod+space focus mode_toggle
+
+# next/previous workspace
+bindsym $other+Tab focus right
+bindsym $other+Shift+Tab focus left
+bindsym $mod+Tab workspace back_and_forth
+
+# switch to workspace
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2: dev
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9: emails
+bindsym $mod+0 workspace 10: slacks
+
+# move focused container to workspace
+bindsym $mod+$other+1 move container to workspace 1
+bindsym $mod+$other+2 move container to workspace 2: dev
+bindsym $mod+$other+3 move container to workspace 3
+bindsym $mod+$other+4 move container to workspace 4
+bindsym $mod+$other+5 move container to workspace 5
+bindsym $mod+$other+6 move container to workspace 6
+bindsym $mod+$other+7 move container to workspace 7
+bindsym $mod+$other+8 move container to workspace 8
+bindsym $mod+$other+9 move container to workspace 9: emails
+bindsym $mod+$other+0 move container to workspace 10: slacks
+
+# change border
+bindsym $mod+b border toggle
+
+# starter
+mode "(i)nitial dev workspace | (e)mail workspace | (s)lack workspace | (m)onitor initialization | (k)eyboard initialization" {
+  bindsym s exec ~/.i3/startslacks
+  bindsym i exec ~/.i3/starter
+  bindsym e exec ~/.i3/starteremails
+  bindsym m mode "(1) DP1 left of LVDS1 | (2) No external connected | (3) Mirror displays"
+  bindsym k mode "(1) Initialize Poker 2"
+
+  # back to normal
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $other+Shift+R mode "(i)nitial dev workspace | (e)mail workspace | (s)lack workspace | (m)onitor initialization | (k)eyboard initialization"
+
+
+mode "(1) DP1 left of LVDS1 | (2) No external connected | (3) Mirror displays" {
+  bindsym 1 exec xrandr --output DP1 --auto --left-of LVDS1; mode "default"
+  bindsym 2 exec xrandr --output DP1 --auto --left-of LVDS1; mode "default"
+  bindsym 3 exec xrandr --output DP1 --off; mode "default"
+
+  # back to normal
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+mode "(1) Initialize Poker 2" {
+  bindsym 1 exec --no-startup-id setxkbmap -option ctrl:nocaps; mode "default"
+
+  # back to normal
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+# resize window
+mode "resize" {
+  # These bindings trigger as soon as you enter the resize mode
+  bindsym h resize shrink width 5 px or 5 ppt
+  bindsym j resize grow height 5 px or 5 ppt
+  bindsym k resize shrink height 5 px or 5 ppt
+  bindsym l resize grow width 5 px or 5 ppt
+
+  # back to normal
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# volume control
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5% && pactl set-sink-mute @DEFAULT_SINK@ 0 $update
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5% && pactl set-sink-mute @DEFAULT_SINK@ 0 $update
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle $update
+
+# brightness control
+bindsym XF86MonBrightnessUp exec /usr/bin/xbacklight -inc 10
+bindsym XF86MonBrightnessDown exec /usr/bin/xbacklight -dec 5
+
+# custom window settings
+for_window [class="^URxvt$"] border 1pixel
+
+# Jump to urgent window
+bindsym $mod+x [urgent=latest] focus
+
+# one bar on both screens
+bar {
+  colors {
+    # Whole color settings
+    background #000000
+    statusline #ffffff
+    separator #666666
+
+    #Type               border      background  font
+    focused_workspace   #008fff     #007fff     #ffffff
+    active_workspace    #333333     #5f676a     #ffffff
+    inactive_workspace  #333333     #222222     #888888
+    urgent_workspace    #aa0000     #990000     #ffffff
+  }
+
+  # i3bar position
+  position bottom
+
+  # using custom i3status.conf
+  status_command i3status -c ~/.i3/i3status.conf
+}
+
+# autostart
+exec --no-startup-id nm-applet
+exec --no-startup-id /usr/bin/feh --bg-scale "~/.i3/wallpapers/boston-skyline.jpg"
+
+# Custom Keybinds
+bindsym $mod+$other+Shift+L exec sh ~/.i3/i3lock.sh
+bindsym Print exec scrot "%Y-%m-%d-%T_$wx$h_scrot.png" -e "mv $f ~/images/screenshots/"
